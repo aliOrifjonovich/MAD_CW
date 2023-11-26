@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">AgroTeches</string>
-    <string name="title_activity_list">List of movies</string>
+    <string name="app_name">AgroPlus</string>
+    <string name="title_activity_list">AgroPlus</string>
+    <string name="name_user">A</string>
+    <string name="product_types">Product Types</string>
     <string name="btn_add_new_icon">AddIcon</string>
     <string name="btn_go_products_list">Home</string>
     <string name="btn_go_draf_list">Saved</string>
@@ -23,5 +25,6 @@
     <string name="detailed_view_release_date_label">Release date: %1$s </string>
     <string name="cinema_icon_desc">Cinema</string>
     <string name="home_icon">HomeIcon</string>
+
 
 </resources>

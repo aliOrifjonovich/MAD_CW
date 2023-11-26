@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -45,7 +46,6 @@ import com.example.mad_cw_00014610.data.dataClasses.AgroTech
 import com.example.movielist.list.AgroTechViewModal
 
 val jostFont = FontFamily(Font(R.font.jost_regular))
-
 @Composable
 fun AgroTechesList(
     viewModel: AgroTechViewModal = AgroTechViewModal(AgroTechRepository()),
@@ -59,12 +59,14 @@ fun AgroTechesList(
         modifier = Modifier
             .fillMaxSize()
     ) {
+        AgroTechListHeader()
+        AgroTechListTypes()
             val movies by viewModel.moviesLiveData.observeAsState()
 
         if (!movies.isNullOrEmpty()) {
             LazyColumn(modifier = Modifier
                 .fillMaxHeight()
-                .padding(0.dp, 0.dp, 0.dp, 90.dp)) {
+                .padding(0.dp, 250.dp, 0.dp, 90.dp)) {
                 items(items = movies!!.toList(), itemContent = { item ->
                     MovieItem(movie = item, onMovieClick)
                 })
@@ -75,72 +77,71 @@ fun AgroTechesList(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(30.dp)
-                .border(width = 1.dp, color=Color.Red),
+                .border(
+                    width = 1.dp,
+                    color = Color.Black,
+                    shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+                ),
+
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-
-            //Home button in navbar
-            FloatingActionButton(
-                modifier = Modifier,
-                containerColor = colorResource(id = R.color.white),
-                onClick = onHomeBtnClick
             ) {
-                Column(
-                    modifier = Modifier
-                        .padding(bottom = 1.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    HomeIcon()
-                    Text(
-                        stringResource(id = R.string.btn_go_products_list),
-                        modifier = Modifier.padding(15.dp, 5.dp),
-                        fontFamily = jostFont,
-                        color = colorResource(id = R.color.black),
-                        fontSize = 16.sp
-                    )
-                }
-            }
-
-            // Add icon navbar button
-            FloatingActionButton(
-                modifier = Modifier,
-                containerColor = colorResource(id = R.color.white),
-                onClick = onAddNewMovieClick
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                  AddIcon()
-//                  Text(
-//                      stringResource(id = R.string.btn_add_new_movie),
-//                      modifier = Modifier.padding(15.dp, 5.dp),
-//                      fontFamily = jostFont,
-//                      color = colorResource(id = R.color.black),
-//                      fontSize = 16.sp
-//                  )
-            }
 
-            //Saved Draf navbar button
-            FloatingActionButton(
-                modifier = Modifier,
-                containerColor = colorResource(id = R.color.white),
-                onClick = onSaveDrafBtnClick
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(bottom = 1.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    SaveDrafIcon()
-                    Text(
-                        stringResource(id = R.string.btn_go_draf_list),
-                        modifier = Modifier.padding(15.dp, 5.dp),
-                        fontFamily = jostFont,
-                        color = colorResource(id = R.color.black),
-                        fontSize = 16.sp
-                    )
-                }
+                //Home button in navbar
+                    Column(
+                        modifier = Modifier
+                            .clickable(onClick = onHomeBtnClick),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        HomeIcon()
+                        Text(
+                            stringResource(id = R.string.btn_go_products_list),
+                            modifier = Modifier.padding(5.dp, 5.dp),
+                            fontFamily = jostFont,
+                            color = colorResource(id = R.color.black),
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+
+
+                // Add icon navbar button
+                    Column(
+                        modifier = Modifier
+                            .clickable(onClick = onAddNewMovieClick),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        AddIcon()
+                    }
+
+
+
+                //Saved Draf navbar button
+                    Column(
+                        modifier = Modifier
+                            .clickable(onClick = onSaveDrafBtnClick),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        SaveDrafIcon()
+                        Text(
+                            stringResource(id = R.string.btn_go_draf_list),
+                            modifier = Modifier.padding(5.dp, 5.dp),
+                            fontFamily = jostFont,
+                            color = colorResource(id = R.color.black),
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
             }
         }
     }
@@ -216,7 +217,7 @@ fun HomeIcon(){
 
 @Composable
 fun SaveDrafIcon(){
-    Image(painter = painterResource(id = R.drawable.outline_home_24),
+    Image(painter = painterResource(id = R.drawable.outline_shopping_bag_24),
         contentDescription = stringResource(id = R.string.btn_go_draf_list)
     )
 }
