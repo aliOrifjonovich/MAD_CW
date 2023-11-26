@@ -66,7 +66,7 @@ fun AgroTechesList(
         if (!movies.isNullOrEmpty()) {
             LazyColumn(modifier = Modifier
                 .fillMaxHeight()
-                .padding(0.dp, 250.dp, 0.dp, 90.dp)) {
+                .padding(0.dp, 240.dp, 0.dp, 90.dp)) {
                 items(items = movies!!.toList(), itemContent = { item ->
                     MovieItem(movie = item, onMovieClick)
                 })
