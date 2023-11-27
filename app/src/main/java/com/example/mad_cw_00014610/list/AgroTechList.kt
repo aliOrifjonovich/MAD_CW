@@ -2,6 +2,7 @@ package com.example.mad_cw_00014610.list
 
 import android.graphics.PathIterator
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -66,9 +68,10 @@ fun AgroTechesList(
         if (!movies.isNullOrEmpty()) {
             LazyColumn(modifier = Modifier
                 .fillMaxHeight()
-                .padding(0.dp, 240.dp, 0.dp, 90.dp)) {
+                .padding(0.dp, 220.dp, 0.dp, 72.dp)
+            ) {
                 items(items = movies!!.toList(), itemContent = { item ->
-                    MovieItem(movie = item, onMovieClick)
+                    AgroTechItem(movie = item, onMovieClick)
                 })
             }
         }
@@ -77,19 +80,15 @@ fun AgroTechesList(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .border(
-                    width = 1.dp,
-                    color = Color.Black,
-                    shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
-                ),
-
+                .background(color = colorResource(id = R.color.green_dark))
+                .padding(top = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
             ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(15.dp),
+                    .padding(start = 20.dp, end = 20.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -104,9 +103,9 @@ fun AgroTechesList(
                         HomeIcon()
                         Text(
                             stringResource(id = R.string.btn_go_products_list),
-                            modifier = Modifier.padding(5.dp, 5.dp),
+                            //modifier = Modifier.padding(5.dp, 5.dp),
                             fontFamily = jostFont,
-                            color = colorResource(id = R.color.black),
+                            color = colorResource(id = R.color.white),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                         )
@@ -135,9 +134,9 @@ fun AgroTechesList(
                         SaveDrafIcon()
                         Text(
                             stringResource(id = R.string.btn_go_draf_list),
-                            modifier = Modifier.padding(5.dp, 5.dp),
+                            //modifier = Modifier.padding(5.dp, 5.dp),
                             fontFamily = jostFont,
-                            color = colorResource(id = R.color.black),
+                            color = colorResource(id = R.color.white),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                         )
@@ -148,7 +147,7 @@ fun AgroTechesList(
 }
 
 @Composable
-private fun MovieItem(movie: AgroTech, onMovieClick: (String) -> Unit) {
+private fun AgroTechItem(movie: AgroTech, onMovieClick: (String) -> Unit) {
     ElevatedCard(
         modifier = Modifier
             .padding(12.dp),
@@ -204,20 +203,26 @@ private fun MovieItemDesc(desc: String) {
 
 @Composable
 fun AddIcon(){
-    Image(painter = painterResource(id = R.drawable.sharp_add_circle_24),
+    Image(
+        modifier = Modifier.size(60.dp),
+        painter = painterResource(id = R.drawable.baseline_add_circle_24),
         contentDescription = stringResource(id = R.string.btn_add_new_icon)
     )
 }
 @Composable
 fun HomeIcon(){
-    Image(painter = painterResource(id = R.drawable.outline_home_24),
+    Image(
+        modifier = Modifier.size(40.dp),
+        painter = painterResource(id = R.drawable.outline_home_24),
         contentDescription = stringResource(id = R.string.btn_go_products_list)
     )
 }
 
 @Composable
 fun SaveDrafIcon(){
-    Image(painter = painterResource(id = R.drawable.outline_shopping_bag_24),
+    Image(
+        modifier = Modifier.size(40.dp),
+        painter = painterResource(id = R.drawable.outline_shopping_bag_24),
         contentDescription = stringResource(id = R.string.btn_go_draf_list)
     )
 }
