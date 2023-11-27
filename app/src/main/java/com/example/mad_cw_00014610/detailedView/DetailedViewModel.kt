@@ -9,22 +9,22 @@ import kotlinx.coroutines.launch
 
 class DetailedViewModel(
     agrotechId: String,
-    private val movieRepository: AgroTechRepository
+    private val agroTechRepository: AgroTechRepository
 ) : ViewModel() {
 
-    val movieLiveData: MutableLiveData<AgroTech> by lazy {
+    val agroTechLiveData: MutableLiveData<AgroTech> by lazy {
         MutableLiveData<AgroTech>()
     }
 
     init {
-        getMovieById(agrotechId)
+        getAgroTechById(agrotechId)
     }
 
-    private fun getMovieById(agrotechId: String) {
+    private fun getAgroTechById(agrotechId: String) {
         viewModelScope.launch {
             if (!agrotechId.isNullOrEmpty()) {
-                val movie = movieRepository.getMovieById(agrotechId)
-                movieLiveData.value = movie
+                val movie = agroTechRepository.getAgroTechById(agrotechId)
+                agroTechLiveData.value = movie
             }
         }
     }

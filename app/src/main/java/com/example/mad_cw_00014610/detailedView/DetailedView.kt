@@ -1,16 +1,12 @@
 package com.example.mad_cw_00014610.detailedView
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,16 +14,16 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.mad_cw_00014610.data.AgroTechRepository
 import com.example.mad_cw_00014610.R
 
@@ -39,9 +35,9 @@ fun DetailedView(
     viewModel: DetailedViewModel = DetailedViewModel(agrotechId, AgroTechRepository())
 ) {
 
-    val movie by viewModel.movieLiveData.observeAsState()
+    val agrotech by viewModel.agroTechLiveData.observeAsState()
 
-    if (movie != null) {
+    if (agrotech != null) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -51,13 +47,10 @@ fun DetailedView(
                     rememberScrollState()
                 )
         ) {
-            Image(
-                painterResource(R.drawable.detailimage),
-                stringResource(id = R.string.detail_image_desc),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
+
+            if(agrotech!!.releaseDate != null){
+                DetailViewImage(imageUrl = agrotech!!.imageurl)
+            }
 
             MyDivider()
 
@@ -66,21 +59,21 @@ fun DetailedView(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Name(name = movie!!.name)
+                Name(name = agrotech!!.name)
 
-                if (movie!!.releaseDate != null) {
-                    ReleaseDate(releaseDate = movie!!.releaseDate!!)
+                if (agrotech!!.releaseDate != null) {
+                    ReleaseDate(releaseDate = agrotech!!.releaseDate!!)
                 }
             }
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            if (movie!!.budget != null) {
-                Budget(budget = movie!!.budget!!)
+            if (agrotech!!.budget != null) {
+                Budget(budget = agrotech!!.budget!!)
             }
 
-            if (movie!!.description != null) {
-                Description(description = movie!!.description!!)
+            if (agrotech!!.description != null) {
+                Description(description = agrotech!!.description!!)
             }
 
             Spacer(Modifier.height(10.dp))
@@ -94,8 +87,8 @@ fun DetailedView(
                     fontFamily = FontFamily.SansSerif,
                     fontWeight = FontWeight.Bold,
                 )
-                if (!movie!!.actors.isNullOrEmpty()) {
-                    Actors(actors = movie!!.actors!!)
+                if (!agrotech!!.owners.isNullOrEmpty()) {
+                    Owners(owners = agrotech!!.owners!!)
                 }
             }
 
@@ -197,20 +190,20 @@ private fun Description(description: String) {
 
 
 @Composable
-private fun Actors(actors: List<String>) {
+private fun Owners(owners: List<String>) {
     Column(modifier = Modifier.fillMaxWidth()) {
         var i = 0
-        for (actor in actors) {
-            ActorTextView(actor = actor, ++i == actors.size)
+        for (owner in owners) {
+            OwnerTextView(owner = owner, ++i == owners.size)
         }
     }
 }
 
 @Composable
-private fun ActorTextView(actor: String, isTheLastOne: Boolean) {
+private fun OwnerTextView(owner: String, isTheLastOne: Boolean) {
     Text(
         modifier = Modifier.padding(3.dp, 1.dp),
-        text = if (isTheLastOne) actor else "$actor,",
+        text = if (isTheLastOne) owner else "$owner,",
         color = Color.DarkGray,
         fontSize = 19.sp,
         fontFamily = FontFamily.SansSerif,
@@ -225,5 +218,16 @@ private fun MyDivider() {
         modifier = Modifier.fillMaxWidth().padding(0.dp, 10.dp),
         color = Color.LightGray
 
+    )
+}
+@Composable
+private fun DetailViewImage(imageUrl: String?){
+    AsyncImage(
+        model = imageUrl,
+        contentDescription = stringResource(id = R.string.image_error_message),
+        modifier = Modifier
+            .fillMaxSize()
+            .widthIn(min = 0.dp, max = Dp.Infinity)
+            .height(150.dp)
     )
 }

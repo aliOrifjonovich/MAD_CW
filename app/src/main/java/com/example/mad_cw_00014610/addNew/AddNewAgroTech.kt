@@ -46,15 +46,16 @@ fun AddNewAgroTech(
     val localContext = LocalContext.current
     val navController = rememberNavController()
     val name = remember { mutableStateOf("") }
+    val image = remember { mutableStateOf("") }
     val description = remember { mutableStateOf("") }
     val budget = remember { mutableStateOf("") }
     val releaseDate = remember { mutableStateOf("") }
     val actors = remember { mutableStateOf("") }
-    val ratingOptions = listOf("1", "1.5", "2", "2.5", "3", "3.5", "4", "4.5", "5")
+    //val ratingOptions = listOf("1", "1.5", "2", "2.5", "3", "3.5", "4", "4.5", "5")
     val isRatingExpanded = remember {
         mutableStateOf(false)
     }
-    val selectedRatingText = remember { mutableStateOf(ratingOptions[0]) }
+    //val selectedRatingText = remember { mutableStateOf(ratingOptions[0]) }
 
     val response by viewModel.insertResponseLiveData.observeAsState()
 
@@ -93,9 +94,9 @@ fun AddNewAgroTech(
                     .padding(16.dp)
                     .verticalScroll(rememberScrollState())
             ) {
+                ImageInput(name = image.value, onNameChange = {name.value = it})
                 Spacer(modifier = Modifier.height(15.dp))
                 NameInput(name = name.value, onNameChange = { name.value = it })
-                Spacer(Modifier.height(16.dp))
                 DescriptionInput(description = description.value,
                     onDescriptionChange = { description.value = it })
                 Spacer(modifier = Modifier.height(15.dp))
@@ -115,7 +116,7 @@ fun AddNewAgroTech(
                         budgetInput = budget.value,
                         releaseDateInput = releaseDate.value,
                         actorsInput = actors.value,
-                        ratingInput = selectedRatingText.value,
+                        imageInput =  image.value,
                         context = localContext
                     )
 
@@ -194,6 +195,31 @@ private fun NameInput(name: String, onNameChange: (String) -> Unit) {
         })
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ImageInput(name: String, onNameChange: (String) -> Unit) {
+    TextField(modifier = Modifier
+        .fillMaxWidth()
+        .border(
+            width = 2.dp,
+            color = colorResource(id = R.color.bleak_green_light),
+            shape = RoundedCornerShape(
+                topStart = 8.dp,
+                topEnd = 8.dp,
+                bottomStart = 8.dp,
+                bottomEnd = 8.dp
+            )
+        ),
+        colors = TextFieldDefaults.textFieldColors(
+            textColor = Color.Black, containerColor = colorResource(id = R.color.white)
+        ),
+        value = name,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+        onValueChange = { onNameChange(it) },
+        label = {
+            Text(stringResource(id = R.string.image_url))
+        })
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -346,15 +372,15 @@ private fun constructMovieIfInputValid(
     budgetInput: String?,
     releaseDateInput: String?,
     actorsInput: String?,
-    ratingInput: String?,
-    context: Context
+    context: Context,
+    imageInput: String?
 ): AgroTech? {
     if (nameInput.isNullOrEmpty() ||
         descriptionInput.isNullOrEmpty() ||
         budgetInput.isNullOrEmpty() ||
         releaseDateInput.isNullOrEmpty() ||
         actorsInput.isNullOrEmpty() ||
-        ratingInput.isNullOrEmpty()
+        imageInput.isNullOrEmpty()
     ) {
         Toast.makeText(
             context, context.resources.getString(R.string.movie_all_fields_compulsory_warning),
@@ -378,10 +404,10 @@ private fun constructMovieIfInputValid(
     return AgroTech(
         name = nameInput,
         description = descriptionInput,
-        actors = actorsInput.split(","),
+        owners = actorsInput.split(","),
         budget = budgetInput.toInt(),
-        rating = ratingInput.toDouble(),
-        releaseDate = "$releaseDateInput 00:00:00"
+        releaseDate = "$releaseDateInput 00:00:00",
+        imageurl = imageInput
     )
 }
 

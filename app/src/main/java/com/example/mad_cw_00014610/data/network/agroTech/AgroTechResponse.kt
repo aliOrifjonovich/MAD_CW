@@ -10,11 +10,11 @@ data class AgroTechResponse(
     @SerializedName("description")
     val description: String?,
     @SerializedName("text_list")
-    val actors: List<AgroTechResponseActorItem>,
-    @SerializedName("size") //the API has no "budget" field
+    val owners: List<AgroTechResponseActorItem>,
+    @SerializedName("price") //the API has no "budget" field
     val budget: Int?,
-    @SerializedName("price") //the API has no "rating" field
-    val rating: Double?,
     @SerializedName("date")
-    val releaseDate: String?
+    val releaseDate: String?,
+    @SerializedName("url")
+    val imageurl: String?
 )

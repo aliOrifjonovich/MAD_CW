@@ -8,6 +8,7 @@
     <string name="btn_go_draf_list">Saved</string>
     <string name="title_activity_add_new_equipment">Create</string>
     <string name="equipment_name_input_hint">Name of equipment</string>
+    <string name="image_url">Add Image URL</string>
     <string name="equipment_desc_input_hint">Enter product description</string>
     <string name="equipment_release_date_input_label">Enter year of product:</string>
     <string name="equipment_date_input_hint">YYYY-MM-DD</string>
@@ -27,6 +28,7 @@
     <string name="home_icon">HomeIcon</string>
     <string name="update_button">Update</string>
     <string name="delete_button">Delete</string>
+    <string name="image_error_message">AgroPlus image </string>
 
 
 </resources>

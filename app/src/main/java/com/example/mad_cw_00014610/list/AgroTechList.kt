@@ -1,6 +1,5 @@
 package com.example.mad_cw_00014610.list
 
-import android.graphics.PathIterator
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,14 +13,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,12 +26,9 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -42,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.mad_cw_00014610.R
 import com.example.mad_cw_00014610.data.AgroTechRepository
 import com.example.mad_cw_00014610.data.dataClasses.AgroTech
@@ -63,19 +58,24 @@ fun AgroTechesList(
     ) {
         AgroTechListHeader()
         AgroTechListTypes()
-            val movies by viewModel.moviesLiveData.observeAsState()
 
-        if (!movies.isNullOrEmpty()) {
-            LazyColumn(modifier = Modifier
-                .fillMaxHeight()
-                .padding(0.dp, 220.dp, 0.dp, 72.dp)
+        val teches by viewModel.moviesLiveData.observeAsState()
+
+        //Map all items from getter and set values to the items
+        if (!teches.isNullOrEmpty()) {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(0.dp, 220.dp, 0.dp, 72.dp)
             ) {
-                items(items = movies!!.toList(), itemContent = { item ->
-                    AgroTechItem(movie = item, onMovieClick)
+                items(items = teches!!.toList(), itemContent = { item ->
+                    AgroTechItem(tech = item, onMovieClick)
                 })
             }
         }
 
+        //Navigation
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -146,13 +146,24 @@ fun AgroTechesList(
     }
 }
 
+//Each item card UI
 @Composable
-private fun AgroTechItem(movie: AgroTech, onMovieClick: (String) -> Unit) {
+private fun AgroTechItem(tech: AgroTech, onMovieClick: (String) -> Unit) {
     ElevatedCard(
         modifier = Modifier
-            .padding(12.dp),
+            .padding(12.dp)
+            .border(
+                width = 2.dp,
+                color = colorResource(id = R.color.green_dark),
+                shape = RoundedCornerShape(
+                    topStart = 8.dp,
+                    topEnd = 8.dp,
+                    bottomStart = 8.dp,
+                    bottomEnd = 8.dp
+                )
+            ),
         colors = CardDefaults.cardColors(
-            containerColor = colorResource(id = R.color.bleak_yellow), //Card background color
+            containerColor = colorResource(id = R.color.white), //Card background color
             contentColor = Color.DarkGray  //Card content color,e.g.text
         ),
         elevation = CardDefaults.cardElevation(
@@ -166,12 +177,15 @@ private fun AgroTechItem(movie: AgroTech, onMovieClick: (String) -> Unit) {
                 .fillMaxWidth()
                 .padding(12.dp)
                 .clickable {
-                    onMovieClick(movie.id)
+                    onMovieClick(tech.id)
                 }
+
         ) {
-            MovieItemName(name = movie.name)
-            if (!movie.description.isNullOrEmpty())
-                MovieItemDesc(desc = movie.description)
+            AgroTechImage(imageUrl = tech.imageurl)
+
+            MovieItemName(name = tech.name)
+            if (!tech.description.isNullOrEmpty())
+                MovieItemDesc(desc = tech.description)
         }
     }
 }
@@ -201,6 +215,17 @@ private fun MovieItemDesc(desc: String) {
     )
 }
 
+@Composable
+fun AgroTechImage(imageUrl: String?) {
+    AsyncImage(
+        model = imageUrl,
+        contentDescription = stringResource(id = R.string.image_error_message),
+        modifier = Modifier.fillMaxSize()
+    )
+}
+
+
+//Navigation icon functions
 @Composable
 fun AddIcon(){
     Image(

@@ -10,7 +10,7 @@ import retrofit2.http.Query
 
 interface AgroTechService {
     @GET("records/all")
-    suspend fun getAllMovies(
+    suspend fun getAllEquipments(
         @Query("student_id") student_id: String
     ): MyListResponse<AgroTechResponse>
 
@@ -21,7 +21,7 @@ interface AgroTechService {
     ): MyResponse
 
     @GET("records/{record_id}")
-    suspend fun getOneMovieById(
+    suspend fun getOneAgroTechById(
         @Path("record_id") record_id: String,
         @Query("student_id") student_id: String
     ): MyItemResponse<AgroTechResponse>

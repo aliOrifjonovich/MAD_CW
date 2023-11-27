@@ -13,22 +13,23 @@ import com.example.mad_cw_00014610.data.network.agroTech.AgroTechResponseActorIt
 
 class AgroTechRepository {
     suspend fun getMovieList(): List<AgroTech> {
-        val movies = mutableListOf<AgroTech>()
+        val agroteches = mutableListOf<AgroTech>()
 
         try {
             val response: MyListResponse<AgroTechResponse> =
-                RetrofitInstance.movieService.getAllMovies("movie")
-            val moviesFromResponse = response.data
+                RetrofitInstance.agrotechService.getAllEquipments("00014610")
+            val agroTechesFromResponse = response.data
 
-            if (moviesFromResponse != null) {
+            if (agroTechesFromResponse != null) {
 
-                for (movieFromResponse in moviesFromResponse) {
-                    if (movieFromResponse.description != null) {
-                        movies.add(
+                for (agroTechFromResponse in agroTechesFromResponse) {
+                    if (agroTechFromResponse.description != null) {
+                        agroteches.add(
                             AgroTech(
-                                id = movieFromResponse.id.toString(),
-                                name = movieFromResponse.name.uppercase(),
-                                description = movieFromResponse.description
+                                id = agroTechFromResponse.id.toString(),
+                                name = agroTechFromResponse.name.uppercase(),
+                                description = agroTechFromResponse.description,
+                                imageurl = agroTechFromResponse.imageurl,
                             )
                         )
                     }
@@ -38,25 +39,25 @@ class AgroTechRepository {
             ex.printStackTrace()
         }
 
-        return movies
+        return agroteches
     }
 
-    suspend fun insertNewMovie(movie: AgroTech): MyResponse? {
+    suspend fun insertNewMovie(agroTech: AgroTech): MyResponse? {
         val response: MyResponse
 
         try {
             val movieRequest =
                 AgroTechRequest(
-                    name = movie.name,
-                    description = movie.description,
-                    actors = movie.actors,
-                    budget = movie.budget,
-                    rating = movie.rating,
-                    releaseDate = movie.releaseDate
+                    name = agroTech.name,
+                    description = agroTech.description,
+                    owners = agroTech.owners,
+                    budget = agroTech.budget,
+                    releaseDate = agroTech.releaseDate,
+                    imageurl = agroTech.imageurl
                 )
 
-            response = RetrofitInstance.movieService.insertNewMovie(
-                "movie",
+            response = RetrofitInstance.agrotechService.insertNewMovie(
+                "00014610",
                 movieRequest
             )
 
@@ -69,23 +70,23 @@ class AgroTechRepository {
         return response
     }
 
-    suspend fun getMovieById(movieId: String): AgroTech? {
+    suspend fun getAgroTechById(movieId: String): AgroTech? {
         try {
             val response: MyItemResponse<AgroTechResponse> =
-                RetrofitInstance.movieService.getOneMovieById(movieId, "movie")
-            val movieFromResponse = response.data
+                RetrofitInstance.agrotechService.getOneAgroTechById(movieId, "00014610")
+            val agroTechFromResponse = response.data
 
-            if (movieFromResponse != null) {
-                if (movieFromResponse.description != null
+            if (agroTechFromResponse != null) {
+                if (agroTechFromResponse.description != null
                 ) {
                     return AgroTech(
                         id = movieId,
-                        name = movieFromResponse.name,
-                        description = movieFromResponse.description,
-                        actors = extractListOfActorsFromResponse(movieFromResponse.actors),
-                        budget = movieFromResponse.budget,
-                        rating = movieFromResponse.rating,
-                        releaseDate = formatReleaseDate(movieFromResponse.releaseDate)
+                        name = agroTechFromResponse.name,
+                        description = agroTechFromResponse.description,
+                        owners = extractListOfActorsFromResponse(agroTechFromResponse.owners),
+                        budget = agroTechFromResponse.budget,
+                        releaseDate = formatReleaseDate(agroTechFromResponse.releaseDate),
+                        imageurl = agroTechFromResponse.imageurl
                     )
                 }
             }

@@ -28,7 +28,7 @@ class RetrofitInstance {
                 .build()
         }
 
-        val movieService: AgroTechService = getRetrofitInstance()
+        val agrotechService: AgroTechService = getRetrofitInstance()
             .create(AgroTechService::class.java)
 
     }
