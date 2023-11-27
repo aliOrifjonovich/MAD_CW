@@ -1,11 +1,16 @@
 package com.example.mad_cw_00014610.detailedView
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,6 +34,7 @@ import com.example.mad_cw_00014610.R
 
 @Composable
 fun DetailedView(
+    onAddNewMovieClick: () -> Unit,
     agrotechId: String,
     viewModel: DetailedViewModel = DetailedViewModel(agrotechId, AgroTechRepository())
 ) {
@@ -45,7 +51,13 @@ fun DetailedView(
                     rememberScrollState()
                 )
         ) {
-            Name(name = movie!!.name)
+            Image(
+                painterResource(R.drawable.detailimage),
+                stringResource(id = R.string.detail_image_desc),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
 
             MyDivider()
 
@@ -54,22 +66,18 @@ fun DetailedView(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Column() {
-                    if (movie!!.budget != null) {
-                        Budget(budget = movie!!.budget!!)
-                    }
+                Name(name = movie!!.name)
 
-                    if (movie!!.releaseDate != null) {
-                        ReleaseDate(releaseDate = movie!!.releaseDate!!)
-                    }
-                }
-
-                if (movie!!.rating != null) {
-                    Rating(rating = movie!!.rating!!)
+                if (movie!!.releaseDate != null) {
+                    ReleaseDate(releaseDate = movie!!.releaseDate!!)
                 }
             }
 
-            MyDivider()
+            Spacer(modifier = Modifier.width(16.dp))
+
+            if (movie!!.budget != null) {
+                Budget(budget = movie!!.budget!!)
+            }
 
             if (movie!!.description != null) {
                 Description(description = movie!!.description!!)
@@ -77,18 +85,65 @@ fun DetailedView(
 
             Spacer(Modifier.height(10.dp))
 
-            if (!movie!!.actors.isNullOrEmpty()) {
-                Actors(actors = movie!!.actors!!)
+            Column(){
+                Text(
+                    modifier = Modifier.padding(bottom = 3.dp),
+                    text = stringResource(id = R.string.owner_detail_content),
+                    color = Color.Black,
+                    fontSize = 15.sp,
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Bold,
+                )
+                if (!movie!!.actors.isNullOrEmpty()) {
+                    Actors(actors = movie!!.actors!!)
+                }
             }
 
-            Image(
-                painterResource(R.drawable.cinema),
-                stringResource(id = R.string.cinema_icon_desc),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(0.dp, 20.dp)
-            )
+            //Buttons
+            Row(
+                modifier = Modifier.padding(top=10.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Box(
+                    modifier = Modifier
+                        .size(190.dp, 50.dp)
+                        .background(colorResource(id = R.color.bleak_green_light), shape = RoundedCornerShape(15.dp))
+                        .clickable(onClick = onAddNewMovieClick)
+                        .wrapContentSize(Alignment.Center)
+                ) {
+                    Text(
+                        modifier = Modifier.padding(bottom = 3.dp),
+                        text = stringResource(id = R.string.update_button),
+                        color = Color.White,
+                        fontSize = 15.sp,
+                        fontFamily = FontFamily.SansSerif,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Box(
+                    modifier = Modifier
+                        .size(190.dp, 50.dp)
+                        .background(colorResource(id = R.color.dark_red_btn), shape = RoundedCornerShape(15.dp))
+                        .clickable(onClick = onAddNewMovieClick)
+                        .wrapContentSize(Alignment.Center)
+                ) {
+                    Text(
+                        modifier = Modifier.padding(bottom = 3.dp),
+                        text = stringResource(id = R.string.delete_button),
+                        color = Color.White,
+                        fontSize = 15.sp,
+                        fontFamily = FontFamily.SansSerif,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+
         }
     }
 }
@@ -96,43 +151,24 @@ fun DetailedView(
 @Composable
 private fun Name(name: String) {
     Text(
+        modifier= Modifier.width(248.dp),
         text = name,
         color = Color.Black,
-        fontSize = 26.sp,
-        fontWeight = FontWeight.Bold,
+        fontSize = 19.sp,
         fontFamily = FontFamily.Serif,
         textAlign = TextAlign.Left
     )
 }
 
 @Composable
-private fun Rating(rating: Double) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Image(
-            painterResource(R.drawable.baseline_star_half_24),
-            stringResource(id = R.string.cinema_icon_desc),
-            contentScale = ContentScale.Crop
-        )
-
-        Text(
-            text = rating.toString(),
-            color = Color.Black,
-            fontWeight = FontWeight.Bold,
-            fontSize = 23.sp,
-            fontFamily = FontFamily.SansSerif,
-            textAlign = TextAlign.Center
-        )
-    }
-}
-
-@Composable
 private fun Budget(budget: Int) {
     Text(
-        modifier = Modifier.padding(bottom = 3.dp),
-        text = stringResource(id = R.string.detailed_view_budget_label, budget),
+        modifier = Modifier.padding(top=10.dp, bottom = 3.dp),
+        text = stringResource(id = R.string.detailed_view_price_label, budget),
         color = Color.Black,
-        fontSize = 15.sp,
-        fontFamily = FontFamily.SansSerif
+        fontSize = 21.sp,
+        fontFamily = FontFamily.SansSerif,
+        fontWeight = FontWeight.Bold,
     )
 }
 
@@ -186,7 +222,7 @@ private fun ActorTextView(actor: String, isTheLastOne: Boolean) {
 @Composable
 private fun MyDivider() {
     Divider(
-        modifier = Modifier.padding(0.dp, 10.dp),
+        modifier = Modifier.fillMaxWidth().padding(0.dp, 10.dp),
         color = Color.LightGray
 
     )

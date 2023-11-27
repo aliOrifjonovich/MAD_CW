@@ -47,15 +47,21 @@ fun AgroTechListHeader() {
            modifier = Modifier
               .padding(10.dp, 5.dp)
               .border(
-                   width = 3.dp,
-                    color = Color.Black,
-                    shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp, bottomStart = 16.dp, bottomEnd = 16.dp)
-              )
+                 width = 2.dp,
+                 color = colorResource(id = R.color.green_dark),
+                 shape = RoundedCornerShape(
+                    topStart = 8.dp,
+                    topEnd = 8.dp,
+                    bottomStart = 8.dp,
+                    bottomEnd = 8.dp
+                 )
+              ),
         ){
            Text(
               stringResource(id = R.string.name_user),
               modifier = Modifier
                  .padding(18.dp, 10.dp),
+
               fontFamily = jostFont,
               color = colorResource(id = R.color.black),
               fontSize = 23.sp,

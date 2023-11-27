@@ -30,7 +30,7 @@ fun Navigation(navController: NavHostController, context: Context) {
         composable(
             route = "detailedView/{agrotechId}"
         ) { backStackEntry ->
-            DetailedView(agrotechId = backStackEntry.arguments?.getString("agrotechId")!!)
+            DetailedView(agrotechId = backStackEntry.arguments?.getString("agrotechId")!!, onAddNewMovieClick={})
         }
     }
 }

@@ -66,7 +66,7 @@ fun AgroTechListTypes() {
                             .padding(horizontal = 5.dp)
                             .border(
                                 width = 2.dp,
-                                color = Color(R.color.green_dark),
+                                color = colorResource(id = R.color.green_dark),
                                 shape = RoundedCornerShape(
                                     topStart = 8.dp,
                                     topEnd = 8.dp,
