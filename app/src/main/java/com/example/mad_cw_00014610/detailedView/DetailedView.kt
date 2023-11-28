@@ -6,14 +6,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -26,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.mad_cw_00014610.data.AgroTechRepository
 import com.example.mad_cw_00014610.R
+import androidx.compose.runtime.setValue
 
 
 @Composable
@@ -35,7 +41,12 @@ fun DetailedView(
     viewModel: DetailedViewModel = DetailedViewModel(agrotechId, AgroTechRepository())
 ) {
 
+    var showDialog by remember { mutableStateOf(false) }
     val agrotech by viewModel.agroTechLiveData.observeAsState()
+    val deleteItem: () -> Unit = {
+        // Call the function in your view model to delete the item
+    }
+
 
     if (agrotech != null) {
         Column(
@@ -91,6 +102,12 @@ fun DetailedView(
                     Owners(owners = agrotech!!.owners!!)
                 }
             }
+
+            DeleteConfirmationDialog(
+                showDialog = showDialog,
+                onConfirm = deleteItem,
+                onDismiss = { showDialog = false }
+            )
 
             //Buttons
             Row(
@@ -228,6 +245,39 @@ private fun DetailViewImage(imageUrl: String?){
         modifier = Modifier
             .fillMaxSize()
             .widthIn(min = 0.dp, max = Dp.Infinity)
-            .height(150.dp)
+            .height(350.dp),
+        contentScale = ContentScale.Crop
     )
+}
+
+@Composable
+fun DeleteConfirmationDialog(
+    showDialog: Boolean,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            title = { Text(text = "Confirm Deletion") },
+            text = { Text(text = "Are you sure you want to delete this item?") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        onConfirm()
+                        onDismiss()
+                    }
+                ) {
+                    Text(text = "Confirm")
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = onDismiss
+                ) {
+                    Text(text = "Cancel")
+                }
+            }
+        )
+    }
 }

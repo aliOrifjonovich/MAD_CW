@@ -6,7 +6,7 @@
     <string name="btn_add_new_icon">AddIcon</string>
     <string name="btn_go_products_list">Home</string>
     <string name="btn_go_draf_list">Saved</string>
-    <string name="title_activity_add_new_equipment">Create</string>
+    <string name="title_activity_add_new_equipment">Add New Equipment</string>
     <string name="equipment_name_input_hint">Name of equipment</string>
     <string name="image_url">Add Image URL</string>
     <string name="equipment_desc_input_hint">Enter product description</string>

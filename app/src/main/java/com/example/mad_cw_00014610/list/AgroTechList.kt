@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +27,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -59,7 +61,7 @@ fun AgroTechesList(
         AgroTechListHeader()
         AgroTechListTypes()
 
-        val teches by viewModel.moviesLiveData.observeAsState()
+        val teches by viewModel.agroTechLiveData.observeAsState()
 
         //Map all items from getter and set values to the items
         if (!teches.isNullOrEmpty()) {
@@ -151,7 +153,8 @@ fun AgroTechesList(
 private fun AgroTechItem(tech: AgroTech, onMovieClick: (String) -> Unit) {
     ElevatedCard(
         modifier = Modifier
-            .padding(12.dp)
+            .padding(4.dp)
+            .fillMaxWidth()
             .border(
                 width = 2.dp,
                 color = colorResource(id = R.color.green_dark),
@@ -167,7 +170,7 @@ private fun AgroTechItem(tech: AgroTech, onMovieClick: (String) -> Unit) {
             contentColor = Color.DarkGray  //Card content color,e.g.text
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
+            defaultElevation = 8.dp
         ),
     )
     {
@@ -175,43 +178,60 @@ private fun AgroTechItem(tech: AgroTech, onMovieClick: (String) -> Unit) {
             modifier =
             Modifier
                 .fillMaxWidth()
-                .padding(12.dp)
+                .padding(10.dp)
                 .clickable {
                     onMovieClick(tech.id)
                 }
 
         ) {
             AgroTechImage(imageUrl = tech.imageurl)
+            AgroTechItemName(name = tech.name)
+            if (!tech.releaseDate.isNullOrEmpty()) {
+                ReleaseDate(releaseDate = tech.releaseDate!!)
+            } else {
+                Text(text = "No Release Date", color = Color.Gray)
+            }
 
-            MovieItemName(name = tech.name)
-            if (!tech.description.isNullOrEmpty())
-                MovieItemDesc(desc = tech.description)
+
+            if (tech.budget != null) {
+                AgroTechItemPrise(budget = tech.budget!!)
+            } else {
+                Text(text = "No Budget Information", color = Color.Gray)
+            }
         }
     }
 }
 
 @Composable
-private fun MovieItemName(name: String) {
+private fun AgroTechItemName(name: String) {
     Text(
         text = name,
-        fontSize = 21.sp,
+        fontSize = 14.sp,
         fontFamily = jostFont,
         textAlign = TextAlign.Left,
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 5.dp)
+        modifier = Modifier.padding(0.dp, 12.dp, 0.dp, 2.dp)
     )
 }
-
 @Composable
-private fun MovieItemDesc(desc: String) {
+private fun ReleaseDate(releaseDate: String) {
     Text(
-        text = desc,
+        modifier = Modifier.padding(0.dp, 12.dp, 0.dp, 12.dp),
+        text = stringResource(id = R.string.detailed_view_release_date_label, releaseDate),
+        color = Color.Black,
+        fontSize = 15.sp,
+        fontFamily = FontFamily.SansSerif
+    )
+}
+@Composable
+private fun AgroTechItemPrise(budget: Int) {
+    Text(
+        text = stringResource(id = R.string.detailed_view_price_label, budget),
         maxLines = 2,
         overflow = TextOverflow.Ellipsis,
         color = Color.Gray,
-        fontSize = 18.sp,
-        fontFamily = jostFont,
-        textAlign = TextAlign.Left
+        fontSize = 21.sp,
+        fontFamily = FontFamily.SansSerif,
+        fontWeight = FontWeight.Bold,
     )
 }
 
@@ -220,7 +240,10 @@ fun AgroTechImage(imageUrl: String?) {
     AsyncImage(
         model = imageUrl,
         contentDescription = stringResource(id = R.string.image_error_message),
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .aspectRatio(1f),
+        contentScale = ContentScale.Crop
     )
 }
 

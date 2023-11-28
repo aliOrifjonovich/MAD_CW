@@ -9,10 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -51,11 +48,6 @@ fun AddNewAgroTech(
     val budget = remember { mutableStateOf("") }
     val releaseDate = remember { mutableStateOf("") }
     val actors = remember { mutableStateOf("") }
-    //val ratingOptions = listOf("1", "1.5", "2", "2.5", "3", "3.5", "4", "4.5", "5")
-    val isRatingExpanded = remember {
-        mutableStateOf(false)
-    }
-    //val selectedRatingText = remember { mutableStateOf(ratingOptions[0]) }
 
     val response by viewModel.insertResponseLiveData.observeAsState()
 
@@ -67,24 +59,26 @@ fun AddNewAgroTech(
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-            ) {
-                CreateNewMoviePageTitle()
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                //Go to Home Page
 
-                Spacer(modifier = Modifier.weight(1f))
-
-                // "Go to Home" button
                 Button(
                     onClick = {
                         navController.navigate("agroteches_list")
                     },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape= RoundedCornerShape(8.dp),
+                    shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = colorResource(id = R.color.bleak_green_light),
                         contentColor = Color.White
                     )
                 ) {
                     GoToHomeIcon()
+                }
+
+                Box(modifier = Modifier.weight(0.5f)) {
+                    CreateNewAgroTechPageTitle()
                 }
             }
             Column(
@@ -94,7 +88,7 @@ fun AddNewAgroTech(
                     .padding(16.dp)
                     .verticalScroll(rememberScrollState())
             ) {
-                ImageInput(name = image.value, onNameChange = {name.value = it})
+                ImageInput(name = image.value, onImageChange = {image.value = it})
                 Spacer(modifier = Modifier.height(15.dp))
                 NameInput(name = name.value, onNameChange = { name.value = it })
                 DescriptionInput(description = description.value,
@@ -150,15 +144,13 @@ fun AddNewAgroTech(
 }
 
 @Composable
-private fun CreateNewMoviePageTitle() {
+private fun CreateNewAgroTechPageTitle() {
     Box(
         modifier = Modifier
-            .fillMaxWidth() // Expand to full width
             .background(color = colorResource(id = R.color.bleak_green_light))
             .padding(vertical = 50.dp)
     ) {
         Text(
-            modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.title_activity_add_new_equipment),
             color = Color.White,
             fontSize = 30.sp,
@@ -174,6 +166,7 @@ private fun CreateNewMoviePageTitle() {
 private fun NameInput(name: String, onNameChange: (String) -> Unit) {
     TextField(modifier = Modifier
         .fillMaxWidth()
+        .padding(bottom = 12.dp)
         .border(
             width = 2.dp,
             color = colorResource(id = R.color.bleak_green_light),
@@ -197,7 +190,7 @@ private fun NameInput(name: String, onNameChange: (String) -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ImageInput(name: String, onNameChange: (String) -> Unit) {
+private fun ImageInput(name: String, onImageChange: (String) -> Unit) {
     TextField(modifier = Modifier
         .fillMaxWidth()
         .border(
@@ -215,7 +208,7 @@ private fun ImageInput(name: String, onNameChange: (String) -> Unit) {
         ),
         value = name,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-        onValueChange = { onNameChange(it) },
+        onValueChange = { onImageChange(it) },
         label = {
             Text(stringResource(id = R.string.image_url))
         })
@@ -270,7 +263,7 @@ private fun Budget(budget: String, onBudgetChanged: (String) -> Unit) {
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         onValueChange = { onBudgetChanged(it) },
         label = {
-            Text(stringResource(id = R.string.equipment_budget_input_hint),  fontSize = 20.sp,)
+            Text(stringResource(id = R.string.equipment_budget_input_hint), fontSize = 20.sp)
         })
 }
 

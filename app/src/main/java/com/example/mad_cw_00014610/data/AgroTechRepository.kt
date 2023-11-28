@@ -12,7 +12,7 @@ import com.example.mad_cw_00014610.data.network.agroTech.AgroTechResponseActorIt
 
 
 class AgroTechRepository {
-    suspend fun getMovieList(): List<AgroTech> {
+    suspend fun getAgroTechList(): List<AgroTech> {
         val agroteches = mutableListOf<AgroTech>()
 
         try {
@@ -46,7 +46,7 @@ class AgroTechRepository {
         val response: MyResponse
 
         try {
-            val movieRequest =
+            val agroTechRequest =
                 AgroTechRequest(
                     name = agroTech.name,
                     description = agroTech.description,
@@ -58,7 +58,7 @@ class AgroTechRepository {
 
             response = RetrofitInstance.agrotechService.insertNewMovie(
                 "00014610",
-                movieRequest
+                agroTechRequest
             )
 
             Log.d("Update_response", response.toString())
@@ -70,17 +70,17 @@ class AgroTechRepository {
         return response
     }
 
-    suspend fun getAgroTechById(movieId: String): AgroTech? {
+    suspend fun getAgroTechById(agrotechId: String): AgroTech? {
         try {
             val response: MyItemResponse<AgroTechResponse> =
-                RetrofitInstance.agrotechService.getOneAgroTechById(movieId, "00014610")
+                RetrofitInstance.agrotechService.getOneAgroTechById(agrotechId, "00014610")
             val agroTechFromResponse = response.data
 
             if (agroTechFromResponse != null) {
                 if (agroTechFromResponse.description != null
                 ) {
                     return AgroTech(
-                        id = movieId,
+                        id = agrotechId,
                         name = agroTechFromResponse.name,
                         description = agroTechFromResponse.description,
                         owners = extractListOfActorsFromResponse(agroTechFromResponse.owners),
