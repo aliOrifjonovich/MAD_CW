@@ -32,11 +32,14 @@ import coil.compose.AsyncImage
 import com.example.mad_cw_00014610.data.AgroTechRepository
 import com.example.mad_cw_00014610.R
 import androidx.compose.runtime.setValue
+import com.example.mad_cw_00014610.reusablecomp.Navbar
 
 
 @Composable
 fun DetailedView(
     onAddNewMovieClick: () -> Unit,
+    onHomeBtnClick: () -> Unit,
+    onSaveDrafBtnClick: ()->Unit,
     agrotechId: String,
     viewModel: DetailedViewModel = DetailedViewModel(agrotechId, AgroTechRepository())
 ) {
@@ -53,13 +56,13 @@ fun DetailedView(
             modifier = Modifier
                 .fillMaxSize()
                 .background(colorResource(R.color.white))
-                .padding(16.dp)
+                .padding(10.dp, 10.dp, 10.dp, 72.dp)
                 .verticalScroll(
                     rememberScrollState()
                 )
         ) {
 
-            if(agrotech!!.releaseDate != null){
+            if(agrotech!!.imageurl != null){
                 DetailViewImage(imageUrl = agrotech!!.imageurl)
             }
 
@@ -111,14 +114,17 @@ fun DetailedView(
 
             //Buttons
             Row(
-                modifier = Modifier.padding(top=10.dp),
+                modifier = Modifier.padding(top=10.dp, bottom = 20.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Box(
                     modifier = Modifier
                         .size(190.dp, 50.dp)
-                        .background(colorResource(id = R.color.bleak_green_light), shape = RoundedCornerShape(15.dp))
+                        .background(
+                            colorResource(id = R.color.bleak_green_light),
+                            shape = RoundedCornerShape(15.dp)
+                        )
                         .clickable(onClick = onAddNewMovieClick)
                         .wrapContentSize(Alignment.Center)
                 ) {
@@ -138,7 +144,10 @@ fun DetailedView(
                 Box(
                     modifier = Modifier
                         .size(190.dp, 50.dp)
-                        .background(colorResource(id = R.color.dark_red_btn), shape = RoundedCornerShape(15.dp))
+                        .background(
+                            colorResource(id = R.color.dark_red_btn),
+                            shape = RoundedCornerShape(15.dp)
+                        )
                         .clickable(onClick = onAddNewMovieClick)
                         .wrapContentSize(Alignment.Center)
                 ) {
@@ -154,6 +163,11 @@ fun DetailedView(
                 }
             }
 
+        }
+    }
+    Box(modifier = Modifier.fillMaxWidth()){
+        Box(modifier = Modifier.align(Alignment.BottomCenter)){
+            Navbar(  onAddNewMovieClick, onHomeBtnClick, onSaveDrafBtnClick )
         }
     }
 }
@@ -232,7 +246,9 @@ private fun OwnerTextView(owner: String, isTheLastOne: Boolean) {
 @Composable
 private fun MyDivider() {
     Divider(
-        modifier = Modifier.fillMaxWidth().padding(0.dp, 10.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(0.dp, 10.dp),
         color = Color.LightGray
 
     )

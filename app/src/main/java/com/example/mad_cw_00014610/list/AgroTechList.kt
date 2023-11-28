@@ -42,6 +42,7 @@ import coil.compose.AsyncImage
 import com.example.mad_cw_00014610.R
 import com.example.mad_cw_00014610.data.AgroTechRepository
 import com.example.mad_cw_00014610.data.dataClasses.AgroTech
+import com.example.mad_cw_00014610.reusablecomp.Navbar
 import com.example.movielist.list.AgroTechViewModal
 
 val jostFont = FontFamily(Font(R.font.jost_regular))
@@ -77,74 +78,9 @@ fun AgroTechesList(
             }
         }
 
-        //Navigation
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .background(color = colorResource(id = R.color.green_dark))
-                .padding(top = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 20.dp, end = 20.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-
-                //Home button in navbar
-                    Column(
-                        modifier = Modifier
-                            .clickable(onClick = onHomeBtnClick),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        HomeIcon()
-                        Text(
-                            stringResource(id = R.string.btn_go_products_list),
-                            //modifier = Modifier.padding(5.dp, 5.dp),
-                            fontFamily = jostFont,
-                            color = colorResource(id = R.color.white),
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                        )
-                    }
-
-
-                // Add icon navbar button
-                    Column(
-                        modifier = Modifier
-                            .clickable(onClick = onAddNewMovieClick),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        AddIcon()
-                    }
-
-
-
-                //Saved Draf navbar button
-                    Column(
-                        modifier = Modifier
-                            .clickable(onClick = onSaveDrafBtnClick),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        SaveDrafIcon()
-                        Text(
-                            stringResource(id = R.string.btn_go_draf_list),
-                            //modifier = Modifier.padding(5.dp, 5.dp),
-                            fontFamily = jostFont,
-                            color = colorResource(id = R.color.white),
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                        )
-                    }
-            }
-        }
+     Box(modifier = Modifier.align(Alignment.BottomCenter)){
+         Navbar( onAddNewMovieClick, onHomeBtnClick, onSaveDrafBtnClick )
+     }
     }
 }
 
@@ -186,15 +122,9 @@ private fun AgroTechItem(tech: AgroTech, onMovieClick: (String) -> Unit) {
         ) {
             AgroTechImage(imageUrl = tech.imageurl)
             AgroTechItemName(name = tech.name)
-            if (!tech.releaseDate.isNullOrEmpty()) {
-                ReleaseDate(releaseDate = tech.releaseDate!!)
-            } else {
-                Text(text = "No Release Date", color = Color.Gray)
-            }
-
-
+            ReleaseDate(releaseDate = tech.releaseDate ?: "")
             if (tech.budget != null) {
-                AgroTechItemPrise(budget = tech.budget!!)
+                AgroTechItemPrise(budget = tech.budget)
             } else {
                 Text(text = "No Budget Information", color = Color.Gray)
             }
@@ -206,7 +136,7 @@ private fun AgroTechItem(tech: AgroTech, onMovieClick: (String) -> Unit) {
 private fun AgroTechItemName(name: String) {
     Text(
         text = name,
-        fontSize = 14.sp,
+        fontSize = 16.sp,
         fontFamily = jostFont,
         textAlign = TextAlign.Left,
         modifier = Modifier.padding(0.dp, 12.dp, 0.dp, 2.dp)
@@ -214,10 +144,16 @@ private fun AgroTechItemName(name: String) {
 }
 @Composable
 private fun ReleaseDate(releaseDate: String) {
+    val year = if (releaseDate.isNotEmpty()) {
+        releaseDate.substring(0, 4)
+    } else {
+        "No Release Date"
+    }
+
     Text(
-        modifier = Modifier.padding(0.dp, 12.dp, 0.dp, 12.dp),
-        text = stringResource(id = R.string.detailed_view_release_date_label, releaseDate),
-        color = Color.Black,
+        modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 5.dp),
+        text = stringResource(id = R.string.detailed_view_release_date_label, year),
+        color = Color.DarkGray,
         fontSize = 15.sp,
         fontFamily = FontFamily.SansSerif
     )
@@ -228,7 +164,7 @@ private fun AgroTechItemPrise(budget: Int) {
         text = stringResource(id = R.string.detailed_view_price_label, budget),
         maxLines = 2,
         overflow = TextOverflow.Ellipsis,
-        color = Color.Gray,
+        color = Color.Black,
         fontSize = 21.sp,
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Bold,
@@ -247,31 +183,4 @@ fun AgroTechImage(imageUrl: String?) {
     )
 }
 
-
-//Navigation icon functions
-@Composable
-fun AddIcon(){
-    Image(
-        modifier = Modifier.size(60.dp),
-        painter = painterResource(id = R.drawable.baseline_add_circle_24),
-        contentDescription = stringResource(id = R.string.btn_add_new_icon)
-    )
-}
-@Composable
-fun HomeIcon(){
-    Image(
-        modifier = Modifier.size(40.dp),
-        painter = painterResource(id = R.drawable.outline_home_24),
-        contentDescription = stringResource(id = R.string.btn_go_products_list)
-    )
-}
-
-@Composable
-fun SaveDrafIcon(){
-    Image(
-        modifier = Modifier.size(40.dp),
-        painter = painterResource(id = R.drawable.outline_shopping_bag_24),
-        contentDescription = stringResource(id = R.string.btn_go_draf_list)
-    )
-}
 

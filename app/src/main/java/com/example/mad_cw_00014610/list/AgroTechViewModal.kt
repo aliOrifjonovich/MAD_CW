@@ -16,13 +16,14 @@ class AgroTechViewModal(
     }
 
     init {
-        getAllMovies()
+        getAllitems()
     }
 
-    fun getAllMovies() {
+    fun getAllitems() {
         viewModelScope.launch {
             val agroTeches = agroTechRepository.getAgroTechList()
             agroTechLiveData.value = agroTeches
         }
     }
 }
+

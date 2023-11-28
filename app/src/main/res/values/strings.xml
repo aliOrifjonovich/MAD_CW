@@ -21,7 +21,7 @@
     <string name="saved_success_msg">Saved</string>
     <string name="saved_fail_msg">Failed to save</string>
     <string name="title_activity_add_new">AddNewActivity</string>
-    <string name="detailed_view_price_label">Price: \u0024%1$s million </string>
+    <string name="detailed_view_price_label">Price: \u0024%1$s</string>
     <string name="owner_detail_content">Owners: </string>
     <string name="detailed_view_release_date_label">Year: %1$s </string>
     <string name="detail_image_desc">detailImage</string>

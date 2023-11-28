@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.mad_cw_00014610.MainActivity
 import com.example.mad_cw_00014610.addNew.AddNewActivity
 import com.example.mad_cw_00014610.detailedView.DetailedView
 import com.example.mad_cw_00014610.list.AgroTechesList
@@ -14,9 +15,12 @@ import com.example.mad_cw_00014610.list.AgroTechesList
 fun Navigation(navController: NavHostController, context: Context) {
     NavHost(navController = navController, startDestination = Screens.AgroTechesListScreen.route) {
         composable(Screens.AgroTechesListScreen.route) {
-            AgroTechesList(onAddNewMovieClick = {
+            AgroTechesList(
+                onAddNewMovieClick = {
                 context.startActivity(Intent(context, AddNewActivity::class.java))
-            }, onHomeBtnClick ={},  onSaveDrafBtnClick={},
+                 },
+                onHomeBtnClick ={context.startActivity(Intent(context, MainActivity::class.java))},
+                onSaveDrafBtnClick={},
                 onMovieClick = { agrotechId ->
                     navController.navigate("detailedView/$agrotechId")
                 }
@@ -30,7 +34,12 @@ fun Navigation(navController: NavHostController, context: Context) {
         composable(
             route = "detailedView/{agrotechId}"
         ) { backStackEntry ->
-            DetailedView(agrotechId = backStackEntry.arguments?.getString("agrotechId")!!, onAddNewMovieClick={})
+            DetailedView(
+                agrotechId = backStackEntry.arguments?.getString("agrotechId")!!,
+                onAddNewMovieClick={ context.startActivity(Intent(context, AddNewActivity::class.java))},
+                onHomeBtnClick ={context.startActivity(Intent(context, MainActivity::class.java))},
+                onSaveDrafBtnClick={},
+            )
         }
     }
 }

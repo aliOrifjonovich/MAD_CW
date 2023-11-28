@@ -29,6 +29,8 @@ class AgroTechRepository {
                                 id = agroTechFromResponse.id.toString(),
                                 name = agroTechFromResponse.name.uppercase(),
                                 description = agroTechFromResponse.description,
+                                budget= agroTechFromResponse.budget,
+                                releaseDate = agroTechFromResponse.releaseDate,
                                 imageurl = agroTechFromResponse.imageurl,
                             )
                         )

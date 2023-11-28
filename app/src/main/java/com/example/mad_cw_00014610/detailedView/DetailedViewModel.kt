@@ -23,8 +23,8 @@ class DetailedViewModel(
     private fun getAgroTechById(agrotechId: String) {
         viewModelScope.launch {
             if (!agrotechId.isNullOrEmpty()) {
-                val movie = agroTechRepository.getAgroTechById(agrotechId)
-                agroTechLiveData.value = movie
+                val agroTech = agroTechRepository.getAgroTechById(agrotechId)
+                agroTechLiveData.value = agroTech
             }
         }
     }
