@@ -44,7 +44,7 @@ class AgroTechRepository {
         return agroteches
     }
 
-    suspend fun insertNewMovie(agroTech: AgroTech): MyResponse? {
+    suspend fun insertNewEquipment(agroTech: AgroTech): MyResponse? {
         val response: MyResponse
 
         try {
@@ -58,7 +58,7 @@ class AgroTechRepository {
                     imageurl = agroTech.imageurl
                 )
 
-            response = RetrofitInstance.agrotechService.insertNewMovie(
+            response = RetrofitInstance.agrotechService.insertNewEquipment(
                 "00014610",
                 agroTechRequest
             )
@@ -98,6 +98,19 @@ class AgroTechRepository {
             return null
         }
         return null
+    }
+
+    suspend fun deleteAgroTechById(agroTechId: String): MyResponse? {
+        val response: MyResponse
+        try {
+            response = RetrofitInstance.agrotechService.deleteOneAgroTechById(agroTechId, "00014610")
+
+            Log.d("Update_response", response.toString())
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
+        return response
     }
 
     private fun extractListOfActorsFromResponse(

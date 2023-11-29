@@ -31,10 +31,10 @@ import com.example.mad_cw_00014610.R
 val imageList = listOf(
     R.drawable.typeimage1,
     R.drawable.typeimage2,
-    R.drawable.typeimage1,
-    R.drawable.typeimage2,
-    R.drawable.typeimage1,
-    R.drawable.typeimage2,
+    R.drawable.typeimage3,
+    R.drawable.typeimage4,
+    R.drawable.typeimage5,
+    R.drawable.typeimage6,
 )
 @Composable
 fun AgroTechListTypes() {

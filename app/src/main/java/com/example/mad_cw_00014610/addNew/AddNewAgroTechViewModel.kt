@@ -15,11 +15,11 @@ class AddNewAgroTechViewModel(private val movieRepository: AgroTechRepository) :
         MutableLiveData<MyResponse>()
     }
 
-    fun saveNewMovie(movie: AgroTech) {
+    fun saveNewEquipment(newEquipment: AgroTech) {
         viewModelScope.launch {
             try {
 
-                val response = movieRepository.insertNewMovie(movie)
+                val response = movieRepository.insertNewEquipment(newEquipment)
                 insertResponseLiveData.value = response
 
                 Log.d("Update_response", response.toString())

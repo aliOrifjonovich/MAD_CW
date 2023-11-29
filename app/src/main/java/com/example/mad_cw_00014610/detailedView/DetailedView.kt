@@ -1,6 +1,8 @@
 package com.example.mad_cw_00014610.detailedView
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -32,6 +34,7 @@ import coil.compose.AsyncImage
 import com.example.mad_cw_00014610.data.AgroTechRepository
 import com.example.mad_cw_00014610.R
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.painterResource
 import com.example.mad_cw_00014610.reusablecomp.Navbar
 
 
@@ -41,15 +44,23 @@ fun DetailedView(
     onHomeBtnClick: () -> Unit,
     onSaveDrafBtnClick: ()->Unit,
     agrotechId: String,
-    viewModel: DetailedViewModel = DetailedViewModel(agrotechId, AgroTechRepository())
+    viewModel: DetailedViewModel = DetailedViewModel(
+        agrotechId, AgroTechRepository(), onHomeBtnClick
+    )
 ) {
 
     var showDialog by remember { mutableStateOf(false) }
     val agrotech by viewModel.agroTechLiveData.observeAsState()
-    val deleteItem: () -> Unit = {
-        // Call the function in your view model to delete the item
+    val onDeleteClick: () -> Unit = {
+        showDialog = true
     }
 
+    val onConfirmDelete: () -> Unit = {
+        viewModel.agroTechLiveData.value?.id?.let { agroTechId ->
+            viewModel.deleteAgroTechById(agroTechId)
+        }
+
+    }
 
     if (agrotech != null) {
         Column(
@@ -108,7 +119,7 @@ fun DetailedView(
 
             DeleteConfirmationDialog(
                 showDialog = showDialog,
-                onConfirm = deleteItem,
+                onConfirm = onConfirmDelete,
                 onDismiss = { showDialog = false }
             )
 
@@ -148,7 +159,7 @@ fun DetailedView(
                             colorResource(id = R.color.dark_red_btn),
                             shape = RoundedCornerShape(15.dp)
                         )
-                        .clickable(onClick = onAddNewMovieClick)
+                        .clickable(onClick = onDeleteClick)
                         .wrapContentSize(Alignment.Center)
                 ) {
                     Text(
@@ -261,7 +272,8 @@ private fun DetailViewImage(imageUrl: String?){
         modifier = Modifier
             .fillMaxSize()
             .widthIn(min = 0.dp, max = Dp.Infinity)
-            .height(350.dp),
+            .border(width = 1.dp, color = Color.White)
+            .height(300.dp),
         contentScale = ContentScale.Crop
     )
 }
@@ -275,25 +287,61 @@ fun DeleteConfirmationDialog(
     if (showDialog) {
         AlertDialog(
             onDismissRequest = onDismiss,
-            title = { Text(text = "Confirm Deletion") },
-            text = { Text(text = "Are you sure you want to delete this item?") },
+            title = { DeleteIcon() },
+            text = { TextInfo() },
             confirmButton = {
                 Button(
                     onClick = {
                         onConfirm()
                         onDismiss()
-                    }
+                    },
+                    modifier= Modifier
+                        .padding(vertical = 8.dp)
                 ) {
-                    Text(text = "Confirm")
+                    Text(text = "Delete", modifier = Modifier.width(80.dp).padding(start = 10.dp), fontSize=19.sp)
                 }
             },
             dismissButton = {
                 Button(
-                    onClick = onDismiss
+                    onClick = onDismiss,
+                    modifier= Modifier
+                        .padding(vertical = 8.dp)
                 ) {
-                    Text(text = "Cancel")
+                    Text(text = "Cancel", modifier = Modifier.width(80.dp).padding(start = 10.dp), fontSize=19.sp)
                 }
             }
+        )
+    }
+}
+
+@Composable
+private  fun DeleteIcon(){
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(id =  R.drawable.outline_delete_24),
+            contentDescription = null,
+            modifier = Modifier
+                .size(60.dp)
+                .align(Alignment.CenterVertically)
+        )
+    }
+}
+
+@Composable
+fun TextInfo(){
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = "Are you sure you want to delete?",
+            textAlign = TextAlign.Center,
+            fontSize = 20.sp
         )
     }
 }

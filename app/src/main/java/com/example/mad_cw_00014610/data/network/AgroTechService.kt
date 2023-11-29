@@ -16,7 +16,7 @@ interface AgroTechService {
     ): MyListResponse<AgroTechResponse>
 
     @POST("records")
-    suspend fun insertNewMovie(
+    suspend fun insertNewEquipment(
         @Query("student_id") student_id: String,
         @Body movieRequest: AgroTechRequest
     ): MyResponse
@@ -28,8 +28,8 @@ interface AgroTechService {
     ): MyItemResponse<AgroTechResponse>
 
     @DELETE("records/{record_id}")
-    suspend fun deleteAgroTech(
+    suspend fun deleteOneAgroTechById(
         @Path("record_id") recordId: String,
         @Query("student_id") studentId: String
-    ): MyResponse // Update MyResponse to match your response type
+    ): MyResponse
 }

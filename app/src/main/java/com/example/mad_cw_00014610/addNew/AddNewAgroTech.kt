@@ -104,7 +104,7 @@ fun AddNewAgroTech(
 
                 Spacer(Modifier.height(16.dp))
                 AddNewButton {
-                    val constructedMovie: AgroTech? = constructMovieIfInputValid(
+                    val constructedAgroTech: AgroTech? = constructAgroTechIfInputValid(
                         nameInput = name.value,
                         descriptionInput = description.value,
                         budgetInput = budget.value,
@@ -114,10 +114,10 @@ fun AddNewAgroTech(
                         context = localContext
                     )
 
-                    if (constructedMovie != null
+                    if (constructedAgroTech != null
                     ) {
-                        viewModel.saveNewMovie(
-                            constructedMovie
+                        viewModel.saveNewEquipment(
+                            constructedAgroTech
                         )
                     }
                 }
@@ -129,7 +129,9 @@ fun AddNewAgroTech(
             Text(
                 modifier = Modifier
                     .padding(20.dp)
-                    .align(Alignment.Center),
+                    .align(Alignment.Center)
+                    .background(color = colorResource(id = R.color.bleak_green_light)),
+                color=Color.White,
                 fontSize = 19.sp,
                 text = if (response!!.status == "OK") stringResource(id = R.string.saved_success_msg)
                 else stringResource(id = R.string.saved_fail_msg)
@@ -359,7 +361,7 @@ private fun AddNewButton(onClick: () -> Unit) {
     }
 }
 
-private fun constructMovieIfInputValid(
+private fun constructAgroTechIfInputValid(
     nameInput: String?,
     descriptionInput: String?,
     budgetInput: String?,

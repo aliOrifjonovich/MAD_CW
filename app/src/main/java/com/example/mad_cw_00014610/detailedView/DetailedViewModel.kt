@@ -1,5 +1,6 @@
 package com.example.mad_cw_00014610.detailedView
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,8 +10,9 @@ import kotlinx.coroutines.launch
 
 class DetailedViewModel(
     agrotechId: String,
-    private val agroTechRepository: AgroTechRepository
-) : ViewModel() {
+    private val agroTechRepository: AgroTechRepository,
+    private val onHomeBtnClick: () -> Unit
+    ) : ViewModel() {
 
     val agroTechLiveData: MutableLiveData<AgroTech> by lazy {
         MutableLiveData<AgroTech>()
@@ -25,6 +27,20 @@ class DetailedViewModel(
             if (!agrotechId.isNullOrEmpty()) {
                 val agroTech = agroTechRepository.getAgroTechById(agrotechId)
                 agroTechLiveData.value = agroTech
+            }
+        }
+    }
+
+    fun deleteAgroTechById(agroTechId: String) {
+        viewModelScope.launch {
+            try {
+
+                val deleted = agroTechRepository.deleteAgroTechById(agroTechId)
+
+                Log.d("deleted_response", deleted.toString())
+                onHomeBtnClick()
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
